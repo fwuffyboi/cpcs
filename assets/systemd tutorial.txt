@@ -1,0 +1,58 @@
+To run a Python script on device startup using systemd on Linux, you need to create a systemd service unit file. Here are the steps to do that:
+
+    Create your Python script:
+    Create the Python script that you want to run. For example, let's assume your script is named myscript.py.
+
+    Create a systemd service unit file:
+    Create a new systemd service unit file. You can use a text editor to create a file with a .service extension, such as myscript.service. Here's an example of the content:
+
+    ini
+
+[Unit]
+Description=My Python Script
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /path/to/myscript.py
+WorkingDirectory=/path/to/
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Make sure to replace /path/to/myscript.py and /path/to/ with the actual paths to your Python script and its directory.
+
+Copy the service file to the systemd directory:
+Copy the service unit file to the /etc/systemd/system/ directory:
+
+bash
+
+sudo cp myscript.service /etc/systemd/system/
+
+Reload systemd and enable the service:
+Reload systemd to recognize the new service and then enable it:
+
+bash
+
+sudo systemctl daemon-reload
+sudo systemctl enable myscript.service
+
+The enable command ensures that the service starts on boot.
+
+Start the service:
+You can start the service immediately using:
+
+bash
+
+sudo systemctl start myscript.service
+
+If everything is configured correctly, your Python script should now run on device startup.
+
+Check the status of the service:
+You can check the status of the service to see if it's running without errors:
+
+bash
+
+    sudo systemctl status myscript.service
+
+This process assumes that you have Python installed, and the python3 command is available. Adjust the ExecStart line accordingly if your Python executable has a different name. Always replace placeholder paths with the actual paths to your script and working directory.
